@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<body>
+<h1>WeGPT</h1>
+<p>남은 토큰: <span id="t"></span></p>
+<textarea id="q"></textarea>
+<button onclick="send()">보내기</button>
+<pre id="out"></pre>
+<script>
+async function load(){
+ const r=await fetch('/tokens');
+ const j=await r.json();
+ document.getElementById('t').innerText=j.tokens;
+}
+load();
+async function send(){
+ const q=document.getElementById('q').value;
+ const r=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({message:q})});
+ const j=await r.json();
+ document.getElementById('out').innerText=j.reply;
+ load();
+}
+</script>
+</body>
+</html>
